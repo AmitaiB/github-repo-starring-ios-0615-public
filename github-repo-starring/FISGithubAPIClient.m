@@ -30,27 +30,36 @@ NSString *const GITHUB_API_URL=@"https://api.github.com";
 
 
 -(BOOL)checkIfStarred:(NSString *)fullName {
-        //This returns repos because of the URL hard-coded into githubURL (above) "/repositories?..."
-    FISReposDataStore *reposDataStore = [FISReposDataStore sharedDataStore];
-    
-    [FISGithubAPIClient getRepositoriesWithCompletion:^(NSArray *repoDictionaries) {
-        reposDataStore.repositories = [repoDictionaries mutableCopy];
-    }];
-    
-    
-    
-    
-//    FISGithubRepository *namedRepo = [[FISGithubRepository alloc] init];
+//    Ultimately, we will return this...
     __block BOOL isStarred;
-    [reposDataStore.repositories enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString *fullNameFromURL = obj.fullName;
-        if ([fullName isEqualToString: fullNameFromURL]) {
-            
-        }
-    }];
-    
-}
 
+        //Retrieve fullname (e.g., octocat/Hello_World), and parse it into the owner (octocat) and repo (Hello_World)
+    NSArray *ownerAndRepo = [fullName componentsSeparatedByString:@"/"];
+    NSString *owner = ownerAndRepo[0];
+    NSString *repo = ownerAndRepo[1];
+    
+        //Use those strings to form the URL of the query.
+    NSString *githubIsStarredQueryURL = [NSString stringWithFormat:@"%@/user/starred?owner=%@&repo=%@", GITHUB_API_URL, owner, repo];
+    
+        //Instantiate a session...
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    __block NSDictionary *queryResult = @{};
+        //...and make the GET request.
+    [manager GET:githubIsStarredQueryURL 
+      parameters:nil
+         success:^(NSURLSessionDataTask *task, id responseObject) {
+             queryResult = responseObject;
+             if ([queryResult[@"Status"] isEqualToString:@"204 No Content"]) {
+                 isStarred = YES;
+             } else {isStarred = NO;}
+         } 
+         failure:^(NSURLSessionDataTask *task, NSError *error) {
+             NSLog(@"Error: %@", error);
+         }];
+    return isStarred;
+}
+ 
 
 
 @end
