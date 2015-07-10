@@ -15,5 +15,5 @@
 + (instancetype)sharedDataStore;
 
 - (void)getRepositoriesWithCompletion:(void (^)(BOOL success))completionBlock;
-
+- (void)toggleStarForRepositoryWithCompletion:(void (^)(BOOL isStarred))completionBlock;
 @end

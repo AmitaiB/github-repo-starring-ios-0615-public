@@ -6,6 +6,14 @@
 //  Copyright (c) 2014 Joe Burgess. All rights reserved.
 //
 
+    //Note to self: you can use these characters...
+    //Black star        ★	U+2605	&#9733;	
+    //Star                  ☆	U+2606	&#9734;
+    //U+2B50 \xE2\xAD\x90
+    //⭐⭐⭐
+
+
+
 #import "FISViewController.h"
 
 @interface FISViewController ()
