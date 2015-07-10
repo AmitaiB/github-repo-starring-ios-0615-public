@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FISGithubRepository.h"
 
 @interface FISReposDataStore : NSObject
 
@@ -15,5 +16,5 @@
 + (instancetype)sharedDataStore;
 
 - (void)getRepositoriesWithCompletion:(void (^)(BOOL success))completionBlock;
-- (void)toggleStarForRepositoryWithCompletion:(void (^)(BOOL isStarred))completionBlock;
++ (void)toggleStarForRepository:(FISGithubRepository*)repo WithCompletion:(void (^)(BOOL isStarred))completionBlock;
 @end

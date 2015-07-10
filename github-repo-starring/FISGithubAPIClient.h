@@ -30,6 +30,11 @@ NSString *const GITHUB_API_URL;
  *
  *  @return Is the repo already starred? YES / NO (Github URL: $ GET /user/starred/:owner/:repo) receive either a 204 (YES) or 404 (NO)
  */
--(BOOL)checkIfStarred:(NSString *)fullName;
++(void)getRepoStarredStatus:(NSString *)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
+
++(void)starRepoWithName:(NSString*)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
+
++(void)unstarRepoWithName:(NSString*)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
+
 
 @end
