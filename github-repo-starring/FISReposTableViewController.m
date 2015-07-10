@@ -89,13 +89,16 @@
     __block NSString *message = @"";
     
         //toggles star/unstar, then reports what it did in the block.
-    [self.dataStore toggleStarForRepositoryWithCompletion:^(BOOL isStarred) {
-        message = [NSString stringWithFormat:@"You just %@starred this repo!", (isStarred)? @"un" : @""];
-    }];
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Report: Star Toggle"
-                                                                             message:message
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    [FISReposDataStore toggleStarForRepository:self.dataStore.repositories[indexPath.row]
+                                WithCompletion:^(BOOL isStarred) {
+                                    message = [NSString stringWithFormat:@"You just %@starred this repo!", (isStarred)? @"un" : @""];
+                                }
+     ];
+   
+    UIAlertController *alertController = 
+        [UIAlertController alertControllerWithTitle:@"Report: Star Toggle"
+                                            message:message
+                                     preferredStyle:UIAlertControllerStyleAlert];
     
     [self presentViewController:alertController 
                        animated:YES

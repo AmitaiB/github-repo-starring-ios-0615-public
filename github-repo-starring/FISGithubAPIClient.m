@@ -28,36 +28,71 @@ NSString *const GITHUB_API_URL=@"https://api.github.com";
      ];
 }
 
-/*
- +(void)getRepoStarredStatus:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
- +(void)starRepoWithName:    (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
- +(void)unstarRepoWithName:  (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
- 
- */
-
 +(void)getRepoStarredStatus:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock
 {
     NSString *githubIsStarredQueryURL = [NSString stringWithFormat:@"%@/user/starred%@", GITHUB_API_URL, repoFullName];
     
-        //Instantiate a session...
+//Instantiate a session...
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
-    __block NSDictionary *queryResult = @{};
-        //...and make the GET request.
+//...and make the GET request.
     [manager GET:githubIsStarredQueryURL 
       parameters:nil
          success:^(NSURLSessionDataTask *task, id responseObject) {
-             queryResult = responseObject;
-             if ([queryResult[@"Status"] isEqualToString:@"204 No Content"]) {
-                 isStarred = YES;
-             } else {isStarred = NO;}
-         } 
-         failure:^(NSURLSessionDataTask *task, NSError *error) {
-             NSLog(@"Error: %@", error);
-         }];
-    return isStarred;
+                     NSDictionary *queryResult = responseObject;
+                     if ([queryResult[@"Status"] hasPrefix:@"20"])
+                            {completionBlock(YES);}
+                     else   {completionBlock(NO);}
+                 } 
+         failure:^(NSURLSessionDataTask *task, NSError *error)
+                    {NSLog(@"GET Error: %@", error);}
+     ];
 }
  
++(void)starRepoWithName:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock
+{
+    NSString *githubPUTStarURL = [NSString stringWithFormat:@"%@/user/starred%@", GITHUB_API_URL, repoFullName];
+    
+//Instantiate a session...
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+//...and make the PUT request.
+    [manager PUT:githubPUTStarURL 
+      parameters:nil
+         success:^(NSURLSessionDataTask *task, id responseObject) {
+                     NSDictionary *queryResult = responseObject;
+                     if ([queryResult[@"Status"] hasPrefix:@"204"])
+                            {completionBlock(YES);}
+                     else   {completionBlock(NO);}
+                 } 
+         failure:^(NSURLSessionDataTask *task, NSError *error)
+                    {NSLog(@"PUT Error: %@", error);}
+     ];
+
+}
+
++(void)unstarRepoWithName:  (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock
+{
+    NSString *githubDELETEStarURL = [NSString stringWithFormat:@"%@/user/starred%@", GITHUB_API_URL, repoFullName];
+    
+//Instantiate a session...
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+//...and make the DELETE request.
+    [manager DELETE:githubDELETEStarURL 
+         parameters:nil
+            success:^(NSURLSessionDataTask *task, id responseObject) {
+                 NSDictionary *queryResult = responseObject;
+                 if ([queryResult[@"Status"] hasPrefix:@"204"])
+                 {completionBlock(YES);}
+                 else   {completionBlock(NO);}
+            } 
+            failure:^(NSURLSessionDataTask *task, NSError *error)
+                {NSLog(@"PUT Error: %@", error);}
+     ];
+    
+}
+
 
 
 @end
