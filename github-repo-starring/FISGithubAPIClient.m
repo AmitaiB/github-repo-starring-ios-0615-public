@@ -28,18 +28,16 @@ NSString *const GITHUB_API_URL=@"https://api.github.com";
      ];
 }
 
+/*
+ +(void)getRepoStarredStatus:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
+ +(void)starRepoWithName:    (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
+ +(void)unstarRepoWithName:  (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
+ 
+ */
 
--(BOOL)checkIfStarred:(NSString *)fullName {
-//    Ultimately, we will return this...
-    __block BOOL isStarred;
-
-        //Retrieve fullname (e.g., octocat/Hello_World), and parse it into the owner (octocat) and repo (Hello_World)
-    NSArray *ownerAndRepo = [fullName componentsSeparatedByString:@"/"];
-    NSString *owner = ownerAndRepo[0];
-    NSString *repo = ownerAndRepo[1];
-    
-        //Use those strings to form the URL of the query.
-    NSString *githubIsStarredQueryURL = [NSString stringWithFormat:@"%@/user/starred?owner=%@&repo=%@", GITHUB_API_URL, owner, repo];
++(void)getRepoStarredStatus:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock
+{
+    NSString *githubIsStarredQueryURL = [NSString stringWithFormat:@"%@/user/starred%@", GITHUB_API_URL, repoFullName];
     
         //Instantiate a session...
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

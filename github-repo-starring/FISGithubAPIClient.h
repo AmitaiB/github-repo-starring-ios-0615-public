@@ -22,19 +22,8 @@ NSString *const GITHUB_API_URL;
 
 +(void)getRepositoriesWithCompletion:(void (^)(NSArray *repoDictionaries))completionBlock;
 
-
-/**
- *  Check If Starred
- *
- *  @param fullName full_name from a Github repo JSON dictionary.
- *
- *  @return Is the repo already starred? YES / NO (Github URL: $ GET /user/starred/:owner/:repo) receive either a 204 (YES) or 404 (NO)
- */
-+(void)getRepoStarredStatus:(NSString *)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
-
-+(void)starRepoWithName:(NSString*)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
-
-+(void)unstarRepoWithName:(NSString*)repoFullName WithCompletion:(void (^)(BOOL))completionBlock;
-
++(void)getRepoStarredStatus:(NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
++(void)starRepoWithName:    (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
++(void)unstarRepoWithName:  (NSString*)repoFullName WithCompletion:(void(^)(BOOL))completionBlock;
 
 @end
